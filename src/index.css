@@ -21,3 +21,11 @@ input:focus,
 select:focus {
   @apply border-yellow-500;
 }
+
+@media (max-width: 768px) {
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
