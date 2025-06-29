@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import Loader from "../components/Loader";
 import { colourToBg } from "../api/colourToBg";
 import { statsBg } from "../api/colourToBg";
 import EvolutionChain from "../components/EvolutionChain";
+import { FaAngleLeft } from "react-icons/fa6";
 
 export default function PokemonDetail() {
   const { name } = useParams();
@@ -71,8 +72,18 @@ export default function PokemonDetail() {
   const pokemonId = pokemon.id;
   const gifUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemonId}.gif`;
 
+  const genUrl = species.generation.url;
+  const genUrlParts = genUrl.split("/").filter(Boolean);
+  const genId = Number(genUrlParts[genUrlParts.length - 1]);
+
   return (
     <div className="container mx-auto px-5 py-10">
+      <Link to="/" className="mb-10 inline-block ">
+        <button className="flex items-center bg-gray-200 hover:bg-gray-300 py-2 px-3 rounded-full cursor-pointer">
+          <FaAngleLeft className="mr-2" />
+          Back to Home
+        </button>
+      </Link>
       <div className="flex flex-col md:flex-row justify-between">
         <div className="w-full md:w-[47%] mb-6">
           <div className={`${bgClass} relative w-full rounded-2xl p-6 md:p-10`}>
@@ -99,16 +110,20 @@ export default function PokemonDetail() {
         <div className="w-full md:w-[47%]">
           <ul className="flex flex-wrap gap-2 mb-5">
             <li className="bg-orange-400 capitalize px-3 py-2 rounded-full font-medium">
-              {species.generation.name
-                .replace("generation-", "GEN ")
-                .toUpperCase()}
+              <Link to={`/?genId=${genId}`}>
+                {species.generation.name
+                  .replace("generation-", "GEN ")
+                  .toUpperCase()}
+              </Link>
             </li>
             {pokemon.types?.map((typeInfo) => (
               <li
                 key={typeInfo.type.name}
                 className="bg-yellow-200 capitalize px-3 py-2 rounded-full font-medium text-blue-500"
               >
-                {typeInfo.type.name}
+                <Link to={`/?type=${typeInfo.type.name}`}>
+                  {typeInfo.type.name}
+                </Link>
               </li>
             ))}
           </ul>
