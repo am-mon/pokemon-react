@@ -13,6 +13,7 @@ export default function Header() {
     if (keyword.trim() !== "") {
       navigate(`/search?s=${keyword.trim().toLowerCase()}`);
       setKeyWord("");
+      setSearchOpen(false);
     }
   };
 
