@@ -15,6 +15,7 @@ export default function EvolutionChain({ speciesUrl, color }) {
         const species = await fetchPokemonSpecies(speciesUrl);
         const chainUrl = species.evolution_chain.url;
         const evolution = await fetchEvolutionChain(chainUrl);
+
         setEvolutionData(evolution);
       } catch (err) {
         setError(err.message);

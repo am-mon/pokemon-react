@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import Loader from "../components/Loader";
 import { colourToBg } from "../api/colourToBg";
@@ -10,6 +10,8 @@ import { FaAngleLeft } from "react-icons/fa6";
 export default function PokemonDetail() {
   const { name } = useParams();
   const [gifError, setGifError] = useState(false);
+
+  const navigate = useNavigate();
 
   const fetchPokemonAndSpecies = async (name) => {
     try {
@@ -76,14 +78,24 @@ export default function PokemonDetail() {
   const genUrlParts = genUrl.split("/").filter(Boolean);
   const genId = Number(genUrlParts[genUrlParts.length - 1]);
 
+  const backText = window.history.length > 2 ? "Go Back" : "Back to Home";
+  const handleBackClick = () => {
+    if (window.history.length > 2) {
+      navigate(-1);
+    } else {
+      navigate("/");
+    }
+  };
+
   return (
     <div className="container mx-auto px-5 py-10">
-      <Link to="/" className="mb-10 inline-block ">
-        <button className="flex items-center bg-gray-200 hover:bg-gray-300 py-2 px-3 rounded-full cursor-pointer">
-          <FaAngleLeft className="mr-2" />
-          Back to Home
-        </button>
-      </Link>
+      <button
+        onClick={handleBackClick}
+        className="flex items-center bg-gray-200 hover:bg-gray-300 py-2 px-3 rounded-full cursor-pointer mb-10"
+      >
+        <FaAngleLeft className="mr-2" />
+        {backText}
+      </button>
       <div className="flex flex-col md:flex-row justify-between">
         <div className="w-full md:w-[47%] mb-6">
           <div className={`${bgClass} relative w-full rounded-2xl p-6 md:p-10`}>
