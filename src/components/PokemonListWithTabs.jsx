@@ -24,7 +24,6 @@ export default function PokemonListWithTabs() {
   // update URL when gen or type changes
   const setGenId = (newGenId) => {
     searchParams.set("genId", newGenId);
-
     setSearchParams(searchParams);
   };
 
@@ -36,6 +35,8 @@ export default function PokemonListWithTabs() {
   // scroll to top on gen/type change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    setMobileGenOpen(false);
+    setMobileTypeOpen(false);
   }, [genId, selectedType]);
 
   const {
