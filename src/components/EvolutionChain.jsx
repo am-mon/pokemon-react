@@ -72,7 +72,7 @@ export default function EvolutionChain({ evolution_chain_url }) {
         Evolution Chain
       </h3>
       {/* <div>{JSON.stringify(evoChainList, 2, null)}</div> */}
-      <ul className="flex flex-wrap flex-col md:flex-row gap-x-3 gap-y-5 items-center justify-center">
+      <ul className="flex flex-wrap flex-col md:flex-row gap-x-3 gap-y-2 md:gap-y-5 items-center justify-center">
         {detailedChains.map((chain, index) => {
           const itemWidth =
             detailedChains.length > 4
