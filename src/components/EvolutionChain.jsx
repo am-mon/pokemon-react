@@ -1,78 +1,89 @@
 import React, { useEffect, useState } from "react";
-import { fetchPokemonSpecies, fetchEvolutionChain } from "../api/pokemonApi";
+import { fetchEvolutionChain } from "../api/pokemonApi";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import { colourToBg } from "../api/colourToBg";
 import { FaChevronRight } from "react-icons/fa6";
+import PokemonCard from "./PokemonCard";
 
-export default function EvolutionChain({ speciesUrl, color }) {
-  const [evolutionData, setEvolutionData] = useState(null);
-  const [error, setError] = useState(null);
+export default function EvolutionChain({ evolution_chain_url }) {
+  const [evoChainList, setEvoChainList] = useState([]);
+  const [detailedChains, setDetailedChains] = useState([]);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["EvolutionChain", evolution_chain_url],
+    queryFn: () => fetchEvolutionChain(evolution_chain_url),
+    enabled: !!evolution_chain_url,
+  });
+
+  console.log("data", data);
 
   useEffect(() => {
-    if (!speciesUrl) return;
+    const getChains = [];
+    getChains.push({
+      name: data?.chain.species.name,
+      url: data?.chain.species.url,
+    });
+    data?.chain.evolves_to.forEach((evolve) => {
+      getChains.push({ name: evolve.species.name, url: evolve.species.url });
+      evolve.evolves_to.forEach((nextEvolve) => {
+        getChains.push({
+          name: nextEvolve.species.name,
+          url: nextEvolve.species.url,
+        });
+      });
+    });
+    setEvoChainList(getChains);
+  }, [data]);
 
-    const fetchChain = async () => {
-      try {
-        const species = await fetchPokemonSpecies(speciesUrl);
-        const chainUrl = species.evolution_chain.url;
-        const evolution = await fetchEvolutionChain(chainUrl);
+  useEffect(() => {
+    if (!evoChainList.length) return;
 
-        setEvolutionData(evolution);
-      } catch (err) {
-        setError(err.message);
-      }
+    const fetchAllChains = async () => {
+      const results = await Promise.all(
+        evoChainList.map(async ({ name, url }) => {
+          if (!url) return null;
+          const res = await fetch(url);
+          const speciesData = await res.json();
+
+          const pokemonUrl = speciesData.varieties?.[0]?.pokemon?.url;
+          let pokemonId = null;
+          if (pokemonUrl) {
+            pokemonId = pokemonUrl.split("/").filter(Boolean).pop();
+          }
+
+          return {
+            id: pokemonId,
+            name,
+          };
+        })
+      );
+      setDetailedChains(results.filter(Boolean));
     };
-    fetchChain();
-  }, [speciesUrl]);
+    fetchAllChains();
+  }, [evoChainList]);
 
-  if (error) return <div>Error: {error}</div>;
-  if (!evolutionData) return <div>Loading Evolution Chain...</div>;
-
-  {
-    console.log("evolutionData:", evolutionData);
-  }
-
-  function flattenEvolutionChain(chain) {
-    let speciesList = [];
-
-    function recurse(currentChain) {
-      speciesList.push(currentChain.species);
-      currentChain.evolves_to.forEach(recurse);
-    }
-
-    recurse(chain);
-    return speciesList;
-  }
-
-  const speciesList = evolutionData
-    ? flattenEvolutionChain(evolutionData.chain)
-    : [];
+  if (isLoading) return <p>Loading evolution chain...</p>;
+  if (error) return <p>Error loading Pokémon data.</p>;
 
   return (
-    <div className="mt-14">
-      <h3 className="text-3xl font-semibold mb-7 text-center">Evolutions</h3>
-      <ul className="flex flex-col md:flex-row gap-3 items-center justify-center">
-        {speciesList.map((species, index) => {
-          const id = species.url.split("/").filter(Boolean).pop();
-          const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+    <div className="container mx-auto mt-14">
+      <h3 className="text-3xl font-semibold mb-8 text-center">
+        Evolution Chain
+      </h3>
+      {/* <div>{JSON.stringify(evoChainList, 2, null)}</div> */}
+      <ul className="flex flex-wrap flex-col md:flex-row gap-x-3 gap-y-5 items-center justify-center">
+        {detailedChains.map((chain, index) => {
           const itemWidth =
-            speciesList.length > 3 ? "w-[18%]" : "w-full mg:w-[25%] lg:w-[22%]";
-
+            detailedChains.length > 4
+              ? "w-full md:w-[23%] lg:w-[15%]"
+              : "w-full md:w-[25%] lg:w-[20%]";
           return (
-            <React.Fragment key={species.name}>
-              <li
-                key={species.name}
-                className={`text-center rounded-2xl p-5 ${itemWidth} ${color}`}
-              >
-                <Link to={`/pokemon/${species.name}`}>
-                  <img
-                    src={imageUrl}
-                    alt={species.name}
-                    className="w-[90%] mx-auto"
-                  />
-                  <h3 className="text-center text-2xl mt-5 ">{species.name}</h3>
-                </Link>
+            <React.Fragment key={chain.id}>
+              <li className={`text-center rounded-2xl ${itemWidth}`}>
+                <PokemonCard id={chain.id} name={chain.name} />
               </li>
-              {!(index === speciesList.length - 1) && (
+              {!(index === detailedChains.length - 1) && (
                 <li>
                   <FaChevronRight className="text-5xl text-gray-400 rotate-90 md:rotate-0" />
                 </li>
