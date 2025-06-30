@@ -76,7 +76,7 @@ export default function EvolutionChain({ evolution_chain_url }) {
         {detailedChains.map((chain, index) => {
           const itemWidth =
             detailedChains.length > 4
-              ? "w-full md:w-[23%] lg:w-[15%]"
+              ? "w-full md:w-[23%] lg:w-[17%]"
               : "w-full md:w-[25%] lg:w-[20%]";
           return (
             <React.Fragment key={chain.id}>
