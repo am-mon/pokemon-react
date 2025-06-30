@@ -18,7 +18,7 @@ export default function PokemonDetail() {
     queryKey: ["PokemonDetail", name],
     queryFn: async () => {
       const species = await fetchPokemonSpecies(name);
-      const pokemon = await fetchPokemon(name);
+      const pokemon = await fetchPokemon(species?.id || name);
       return { species, pokemon };
     },
     enabled: !!name,
