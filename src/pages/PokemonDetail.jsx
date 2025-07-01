@@ -97,7 +97,9 @@ export default function PokemonDetail() {
                   key={type.type.name}
                   className="bg-yellow-200 capitalize px-3 py-2 rounded-full font-medium text-blue-500"
                 >
-                  <Link to={`/?type=${type.type.name}`}>{type.type.name}</Link>
+                  <Link to={`/?genId=${genId}&type=${type.type.name}`}>
+                    {type.type.name}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -123,7 +125,7 @@ export default function PokemonDetail() {
                   </li>
                 ))}
               </ul>
-            </div>{" "}
+            </div>
             <div>
               <h3 className="text-xl font-semibold mb-1">Stats:</h3>
               <ul className="">
