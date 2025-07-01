@@ -72,14 +72,14 @@ export default function PokemonCard({ id, name, onClick }) {
             <img
               src={gifUrl}
               alt={`${name} gif`}
-              className="w-auto h-auto"
+              className="w-auto h-auto mx-auto"
               loading="lazy"
               onError={() => setGifError(true)}
             />
           </div>
         )}
       </div>
-      <h3 className="text-2xl capitalize mb-">{name}</h3>
+      <h3 className="text-2xl capitalize">{name}</h3>
       <h3 className="text-base capitalize mb-4">ID: {id}</h3>
       <div className="text-center text-sm">
         <div className="capitalize gap-1 flex flex-wrap justify-center">
