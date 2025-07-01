@@ -15,7 +15,6 @@ export default function PokemonListWithTabs() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [mobileGenOpen, setMobileGenOpen] = useState(false);
   const [mobileTypeOpen, setMobileTypeOpen] = useState(false);
-  const [selectedGenName, setSelectedGenName] = useState("Gen i");
 
   // read from URL query params or use default values
   const genId = Number(searchParams.get("genId")) || 1;
@@ -82,7 +81,7 @@ export default function PokemonListWithTabs() {
             mobileGenOpen && "bg-orange-400"
           }`}
         >
-          {/* Gen {genId} */} {selectedGenName}
+          Gen {genId}
           <img src={iconFilter} alt="Filter" className="ml-2" />
         </button>
         <button
@@ -95,11 +94,7 @@ export default function PokemonListWithTabs() {
         </button>
       </div>
       <div className={`${mobileGenOpen ? "block" : "hidden"} md:block`}>
-        <GenerationTabs
-          selectedGenId={genId}
-          onSelectGen={setGenId}
-          onSelectGenName={setSelectedGenName}
-        />
+        <GenerationTabs selectedGenId={genId} onSelectGen={setGenId} />
       </div>
       <div className={`${mobileTypeOpen ? "block" : "hidden"} md:block`}>
         <TypeTabs selectedType={selectedType} onSelectType={setSelectedType} />

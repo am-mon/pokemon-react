@@ -10,11 +10,7 @@ const fetchGenerations = async () => {
   return data;
 };
 
-export default function GenerationTabs({
-  selectedGenId,
-  onSelectGen,
-  onSelectGenName,
-}) {
+export default function GenerationTabs({ selectedGenId, onSelectGen }) {
   const {
     data: generations,
     isLoading,
@@ -45,7 +41,6 @@ export default function GenerationTabs({
             <button
               onClick={() => {
                 onSelectGen(genId);
-                onSelectGenName(editedName);
               }}
               key={gen.name}
               className={`${
