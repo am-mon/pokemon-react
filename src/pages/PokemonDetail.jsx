@@ -143,7 +143,7 @@ export default function PokemonDetail() {
                       <span
                         className={`${
                           statsBg[data.species.color?.name]
-                        } absolute top-0 left-0 rounded-tl-2xl rounded-bl-2xl h-3  !border-0 block`}
+                        } absolute top-0 left-0 rounded-tl-2xl rounded-bl-2xl h-3 transition-all duration-500 ease-in-out !border-0 block`}
                         style={{
                           width: `${Math.min(stat.base_stat, 100)}%`,
                         }}
