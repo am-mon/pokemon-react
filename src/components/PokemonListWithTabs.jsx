@@ -41,7 +41,7 @@ export default function PokemonListWithTabs() {
   const {
     data: pokemonsByGen,
     error,
-    isLoading,
+    isLoading: isLoadingGen,
     isError,
   } = useQuery({
     queryKey: ["pokemonsByGen", genId],
@@ -54,13 +54,15 @@ export default function PokemonListWithTabs() {
     enabled: selectedType !== "all",
   });
 
-  if (isLoading) return <Loader />;
+  if (isLoadingGen || isTypeLoading) return <Loader />;
   if (isError) return <div>Error: {error.message}</div>;
 
-  const filteredPokemons = pokemonsByGen.pokemon_species.filter((pokemon) => {
-    if (selectedType === "all") return true;
-    return pokemonsByType?.includes(pokemon.name);
-  });
+  const filteredPokemons = pokemonsByGen?.pokemon_species
+    ? pokemonsByGen.pokemon_species.filter((pokemon) => {
+        if (selectedType === "all") return true;
+        return pokemonsByType?.includes(pokemon.name);
+      })
+    : [];
 
   const handleMobileGenOpen = () => {
     setMobileGenOpen(!mobileGenOpen);

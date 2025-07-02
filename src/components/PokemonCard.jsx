@@ -29,7 +29,7 @@ export default function PokemonCard({ id, name, onClick }) {
   });
 
   const color = species?.color?.name || "gray";
-  const bgClass = colourToBg[color] || "bg-gray-200 text-gray-900";
+  const bgClass = colourToBg[color] || "bg-gray-100 text-gray-900";
 
   const officialArtworkUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
   const gifUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${id}.gif`;
