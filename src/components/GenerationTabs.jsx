@@ -21,9 +21,9 @@ export default function GenerationTabs({ selectedGenId, onSelectGen }) {
     queryFn: fetchGenerations,
   });
 
-  if (isLoading) {
-    return <Loader />;
-  }
+  // if (isLoading) {
+  //   return <Loader />;
+  // }
   if (isError) {
     return <div>Error: {error.message}</div>;
   }

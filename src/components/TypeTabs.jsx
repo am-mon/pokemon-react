@@ -21,9 +21,9 @@ export default function TypeTabs({ selectedType, onSelectType }) {
     queryFn: fetchTypes,
   });
 
-  if (isLoading) {
-    return <Loader />;
-  }
+  // if (isLoading) {
+  //   return <Loader />;
+  // }
   if (isError) {
     return <div>Error: {error.message}</div>;
   }

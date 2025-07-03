@@ -29,11 +29,12 @@ function App() {
 
   return (
     <>
+      <AnalyticsTracker />
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
-          <Route path="/pokemon/:name" element={<PokemonDetail />} />
-          <Route path="/search" element={<SearchResults />} />
+          <Route path="pokemon/:name" element={<PokemonDetail />} />
+          <Route path="search" element={<SearchResults />} />
         </Route>
       </Routes>
     </>

@@ -54,15 +54,15 @@ export default function PokemonListWithTabs() {
     enabled: selectedType !== "all",
   });
 
-  if (isLoadingGen || isTypeLoading) return <Loader />;
+  if (isLoadingGen || isTypeLoading) {
+    return <Loader />;
+  }
   if (isError) return <div>Error: {error.message}</div>;
 
-  const filteredPokemons = pokemonsByGen?.pokemon_species
-    ? pokemonsByGen.pokemon_species.filter((pokemon) => {
-        if (selectedType === "all") return true;
-        return pokemonsByType?.includes(pokemon.name);
-      })
-    : [];
+  const filteredPokemons = pokemonsByGen?.pokemon_species?.filter((pokemon) => {
+    if (selectedType === "all") return true;
+    return pokemonsByType?.includes(pokemon.name);
+  });
 
   const handleMobileGenOpen = () => {
     setMobileGenOpen(!mobileGenOpen);
@@ -102,12 +102,18 @@ export default function PokemonListWithTabs() {
         <TypeTabs selectedType={selectedType} onSelectType={setSelectedType} />
       </div>
 
-      <h3 className="my-6 text-2xl">
-        <span className="text-blue-500">{filteredPokemons.length} Pokémon</span>{" "}
-        found in Generation <span className="text-orange-500">{genId}</span>{" "}
-        with type <span className="text-yellow-400">{selectedType}</span>.
-      </h3>
-      <PokemonListDisplay pokemons={filteredPokemons} />
+      {filteredPokemons && (
+        <>
+          <h3 className="my-6 text-2xl">
+            <span className="text-blue-500">
+              {filteredPokemons?.length} Pokémon
+            </span>{" "}
+            found in Generation <span className="text-orange-500">{genId}</span>{" "}
+            with type <span className="text-yellow-400">{selectedType}</span>.
+          </h3>
+          <PokemonListDisplay pokemons={filteredPokemons} />
+        </>
+      )}
     </div>
   );
 }
